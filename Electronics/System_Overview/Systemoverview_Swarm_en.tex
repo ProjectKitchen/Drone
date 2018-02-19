@@ -1,0 +1,179 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{helvet}
+\renewcommand{\familydefault}{cmss}
+\usepackage[natural, table, fixpdftex, hyperref]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,matrix}
+
+%%%<
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{2pt}%
+%%%>
+
+\begin{comment}
+:Title: Systemarchitektur bei Schwarm
+:Copyright: Otrebski
+\end{comment}
+
+
+\begin{document}
+\pagestyle{empty}
+
+
+% Define block styles
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
+    text width=11em, text centered, minimum height=2em]
+\tikzstyle{line} = [draw, latex'-latex', thick]
+
+
+\begin{tikzpicture}[auto, node distance =15em, font=\Large]
+	\node[block, fill=blue!30](controller){Micro-Controller};
+	\node[block, above right of =controller, node distance = 12em, fill=green!30](hive){Swarm Intelligence};
+	\node[block, above of =hive, node distance=6em, fill=red!30](com){Communication};
+	\node[block, below left of =controller, node distance =10em, fill=blue!30](gyro){Gyroscope};
+	\node[block, below right of =controller, node distance =10em, fill=blue!30](mag){Magnetometer};
+	\node[block, left of =gyro, fill=blue!30](acc){Accelerometer};
+	\node[block, right of =mag, fill=blue!30](baro){Barometer};
+	\coordinate[shift={(-2em,2em)}] (FC1) at (acc.west|-controller.north);
+	\coordinate[shift={(2em,-2em)}] (FC2) at (baro.south-|baro.east);
+	\draw[dashed] (FC1) rectangle (FC2);
+	\node[anchor=north west] at (FC1) {Flight-Controller};
+	\node[block, below of =controller, node distance =15em, fill=yellow!30](action){Propulsion};
+	\node[block, left of =hive, node distance = 25em, fill=white!30](peripherie){Periphery};
+	\path[line] (hive) -- (FC1-|com)node[midway]{Servo-Signal Bus \& Serial Interface};
+	\path[line] (hive) -- (com)node[midway, right]{Serial Interface};
+	\path[line] (action) -- (FC2-|action)node[midway, right]{PWM-Signal Bus};
+	\path[line] (peripherie) -- (hive)node[midway,above]{I\textsuperscript{2}C-Interface};
+	\path[line] (controller.west) ++(0,0.5em)-| (acc);
+	\path[line] (controller.west) ++(0,-0.5em)-| (gyro);
+	\path[line] (controller.east) ++(0,0.5em)-| (baro);
+	\path[line] (controller.east) ++(0,-0.5em)-| (mag);
+\end{tikzpicture}
+
+\begin{tikzpicture}[auto, node distance =15em, font=\Large]
+	\node[block, fill=blue!30](controller){Micro-Controller};
+	\node[block, above right of =controller, node distance = 12em, fill=gray!40](hive){Swarm Intelligence};
+	\node[block, above of =hive, node distance=6em, fill=gray!40](com){Communication};
+	\node[block, below left of =controller, node distance =10em, fill=blue!30](gyro){Gyroscope};
+	\node[block, below right of =controller, node distance =10em, fill=blue!30](mag){Magnetometer};
+	\node[block, left of =gyro, fill=blue!30](acc){Accelerometer};
+	\node[block, right of =mag, fill=blue!30](baro){Barometer};
+	\coordinate[shift={(-2em,2em)}] (FC1) at (acc.west|-controller.north);
+	\coordinate[shift={(2em,-2em)}] (FC2) at (baro.south-|baro.east);
+	\draw[dashed] (FC1) rectangle (FC2);
+	\node[anchor=north west] at (FC1) {Flight-Controller};
+	\node[block, below of =controller, node distance =15em, fill=gray!40](action){Propulsion};
+	\node[block, left of =hive, node distance = 25em, fill=gray!40](peripherie){Periphery};
+	\path[line] (hive) -- (FC1-|com)node[midway]{Servo-Signal Bus \& Serial Interface};
+	\path[line] (hive) -- (com)node[midway, right]{Serial Interface};
+	\path[line] (action) -- (FC2-|action)node[midway, right]{PWM-Signal Bus};
+	\path[line] (peripherie) -- (hive)node[midway,above]{I\textsuperscript{2}C-Interface};
+	\path[line] (controller.west) ++(0,0.5em)-| (acc);
+	\path[line] (controller.west) ++(0,-0.5em)-| (gyro);
+	\path[line] (controller.east) ++(0,0.5em)-| (baro);
+	\path[line] (controller.east) ++(0,-0.5em)-| (mag);
+\end{tikzpicture}
+
+\begin{tikzpicture}[auto, node distance =15em, font=\Large]
+	\node[block, fill=gray!40](controller){Micro-Controller};
+	\node[block, above right of =controller, node distance = 12em, fill=green!30](hive){Swarm Intelligence};
+	\node[block, above of =hive, node distance=6em, fill=gray!40](com){Communication};
+	\node[block, below left of =controller, node distance =10em, fill=gray!40](gyro){Gyroscope};
+	\node[block, below right of =controller, node distance =10em, fill=gray!40](mag){Magnetometer};
+	\node[block, left of =gyro, fill=gray!40](acc){Accelerometer};
+	\node[block, right of =mag, fill=gray!40](baro){Barometer};
+	\coordinate[shift={(-2em,2em)}] (FC1) at (acc.west|-controller.north);
+	\coordinate[shift={(2em,-2em)}] (FC2) at (baro.south-|baro.east);
+	\draw[dashed] (FC1) rectangle (FC2);
+	\node[anchor=north west] at (FC1) {Flight-Controller};
+	\node[block, below of =controller, node distance =15em, fill=gray!40](action){Propulsion};
+	\node[block, left of =hive, node distance = 25em, fill=gray!40](peripherie){Periphery};
+	\path[line] (hive) -- (FC1-|com)node[midway]{Servo-Signal Bus \& Serial Interface};
+	\path[line] (hive) -- (com)node[midway, right]{Serial Interface};
+	\path[line] (action) -- (FC2-|action)node[midway, right]{PWM-Signal Bus};
+	\path[line] (peripherie) -- (hive)node[midway,above]{I\textsuperscript{2}C-Interface};
+	\path[line] (controller.west) ++(0,0.5em)-| (acc);
+	\path[line] (controller.west) ++(0,-0.5em)-| (gyro);
+	\path[line] (controller.east) ++(0,0.5em)-| (baro);
+	\path[line] (controller.east) ++(0,-0.5em)-| (mag);
+\end{tikzpicture}
+
+\begin{tikzpicture}[auto, node distance =15em, font=\Large]
+	\node[block, fill=gray!40](controller){Micro-Controller};
+	\node[block, above right of =controller, node distance = 12em, fill=gray!40](hive){Swarm Intelligence};
+	\node[block, above of =hive, node distance=6em, fill=red!30](com){Communication};
+	\node[block, below left of =controller, node distance =10em, fill=gray!40](gyro){Gyroscope};
+	\node[block, below right of =controller, node distance =10em, fill=gray!40](mag){Magnetometer};
+	\node[block, left of =gyro, fill=gray!40](acc){Accelerometer};
+	\node[block, right of =mag, fill=gray!40](baro){Barometer};
+	\coordinate[shift={(-2em,2em)}] (FC1) at (acc.west|-controller.north);
+	\coordinate[shift={(2em,-2em)}] (FC2) at (baro.south-|baro.east);
+	\draw[dashed] (FC1) rectangle (FC2);
+	\node[anchor=north west] at (FC1) {Flight-Controller};
+	\node[block, below of =controller, node distance =15em, fill=gray!40](action){Propulsion};
+	\node[block, left of =hive, node distance = 25em, fill=gray!40](peripherie){Periphery};
+	\path[line] (hive) -- (FC1-|com)node[midway]{Servo-Signal Bus \& Serial Interface};
+	\path[line] (hive) -- (com)node[midway, right]{Serial Interface};
+	\path[line] (action) -- (FC2-|action)node[midway, right]{PWM-Signal Bus};
+	\path[line] (peripherie) -- (hive)node[midway,above]{I\textsuperscript{2}C-Interface};
+	\path[line] (controller.west) ++(0,0.5em)-| (acc);
+	\path[line] (controller.west) ++(0,-0.5em)-| (gyro);
+	\path[line] (controller.east) ++(0,0.5em)-| (baro);
+	\path[line] (controller.east) ++(0,-0.5em)-| (mag);
+\end{tikzpicture}
+
+\begin{tikzpicture}[auto, node distance =15em, font=\Large]
+	\node[block, fill=gray!40](controller){Micro-Controller};
+	\node[block, above right of =controller, node distance = 12em, fill=gray!40](hive){Swarm Intelligence};
+	\node[block, above of =hive, node distance=6em, fill=gray!40](com){Communication};
+	\node[block, below left of =controller, node distance =10em, fill=gray!40](gyro){Gyroscope};
+	\node[block, below right of =controller, node distance =10em, fill=gray!40](mag){Magnetometer};
+	\node[block, left of =gyro, fill=gray!40](acc){Accelerometer};
+	\node[block, right of =mag, fill=gray!40](baro){Barometer};
+	\coordinate[shift={(-2em,2em)}] (FC1) at (acc.west|-controller.north);
+	\coordinate[shift={(2em,-2em)}] (FC2) at (baro.south-|baro.east);
+	\draw[dashed] (FC1) rectangle (FC2);
+	\node[anchor=north west] at (FC1) {Flight-Controller};
+	\node[block, below of =controller, node distance =15em, fill=yellow!30](action){Propulsion};
+	\node[block, left of =hive, node distance = 25em, fill=gray!40](peripherie){Periphery};
+	\path[line] (hive) -- (FC1-|com)node[midway]{Servo-Signal Bus \& Serial Interface};
+	\path[line] (hive) -- (com)node[midway, right]{Serial Interface};
+	\path[line] (action) -- (FC2-|action)node[midway, right]{PWM-Signal Bus};
+	\path[line] (peripherie) -- (hive)node[midway,above]{I\textsuperscript{2}C-Interface};
+	\path[line] (controller.west) ++(0,0.5em)-| (acc);
+	\path[line] (controller.west) ++(0,-0.5em)-| (gyro);
+	\path[line] (controller.east) ++(0,0.5em)-| (baro);
+	\path[line] (controller.east) ++(0,-0.5em)-| (mag);
+\end{tikzpicture}
+
+\begin{tikzpicture}[auto, node distance =15em, font=\Large]
+	\node[block, fill=gray!40](controller){Micro-Controller};
+	\node[block, above right of =controller, node distance = 12em, fill=gray!40](hive){Swarm Intelligence};
+	\node[block, above of =hive, node distance=6em, fill=gray!40](com){Communication};
+	\node[block, below left of =controller, node distance =10em, fill=gray!40](gyro){Gyroscope};
+	\node[block, below right of =controller, node distance =10em, fill=gray!40](mag){Magnetometer};
+	\node[block, left of =gyro, fill=gray!40](acc){Accelerometer};
+	\node[block, right of =mag, fill=gray!40](baro){Barometer};
+	\coordinate[shift={(-2em,2em)}] (FC1) at (acc.west|-controller.north);
+	\coordinate[shift={(2em,-2em)}] (FC2) at (baro.south-|baro.east);
+	\draw[dashed] (FC1) rectangle (FC2);
+	\node[anchor=north west] at (FC1) {Flight-Controller};
+	\node[block, below of =controller, node distance =15em, fill=gray!40](action){Propulsion};
+	\node[block, left of =hive, node distance = 25em, fill=white!30](peripherie){Periphery};
+	\path[line] (hive) -- (FC1-|com)node[midway]{Servo-Signal Bus \& Serial Interface};
+	\path[line] (hive) -- (com)node[midway, right]{Serial Interface};
+	\path[line] (action) -- (FC2-|action)node[midway, right]{PWM-Signal Bus};
+	\path[line] (peripherie) -- (hive)node[midway,above]{I\textsuperscript{2}C-Interface};
+	\path[line] (controller.west) ++(0,0.5em)-| (acc);
+	\path[line] (controller.west) ++(0,-0.5em)-| (gyro);
+	\path[line] (controller.east) ++(0,0.5em)-| (baro);
+	\path[line] (controller.east) ++(0,-0.5em)-| (mag);
+\end{tikzpicture}
+
+\end{document}

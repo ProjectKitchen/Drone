@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="sens_start">1000</integer>
+    <integer name="cal_start">500</integer>
+</resources>

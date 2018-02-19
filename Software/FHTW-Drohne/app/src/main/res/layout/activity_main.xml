@@ -1,0 +1,72 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="45dp"
+    android:paddingRight="25dp"
+    tools:context=".MainActivity" >
+
+
+    <at.technikum_wien.fhtw_drohne.ViewSlider
+        android:id="@+id/throttleView"
+        android:layout_alignParentLeft="true"
+        android:layout_width="0dp"
+        android:layout_height="250dp" />
+
+    <at.technikum_wien.fhtw_drohne.ViewJoystick
+        android:id="@+id/joystickView"
+        android:layout_alignParentRight="true"
+        android:layout_width="250dp"
+        android:layout_height="250dp" />
+
+    <ToggleButton
+        android:id="@+id/toggle_hold"
+        android:textOn="@string/title_hold"
+        android:textOff="@string/title_hold"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@id/joystickView"
+        android:layout_alignBottom="@id/joystickView"
+        android:layout_marginBottom="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ToggleButton
+        android:id="@+id/toggle_arm"
+        android:textOn="@string/title_arm"
+        android:textOff="@string/title_arm"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/toggle_hold"
+        android:layout_toLeftOf="@id/joystickView"
+        android:layout_marginBottom="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/txt_t"
+        android:layout_toRightOf="@id/throttleView"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/txt_x"
+        android:layout_toRightOf="@id/throttleView"
+        android:layout_below="@id/txt_t"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/txt_y"
+        android:layout_toRightOf="@id/throttleView"
+        android:layout_below="@id/txt_x"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/txt_z"
+        android:layout_toRightOf="@id/throttleView"
+        android:layout_below="@id/txt_y"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

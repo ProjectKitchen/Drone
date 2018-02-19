@@ -1,0 +1,76 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{helvet}
+\renewcommand{\familydefault}{cmss}
+\usepackage[natural, table, fixpdftex, hyperref]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,matrix}
+
+%%%<
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{2pt}%
+%%%>
+
+\begin{comment}
+:Title: Systemarchitektur bei Schwarm
+:Copyright: Otrebski
+\end{comment}
+
+
+\begin{document}
+\pagestyle{empty}
+
+
+% Define block styles
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
+    text width=11em, text centered, minimum height=2em]
+\tikzstyle{line} = [draw, latex'-latex', thick]
+    
+
+\begin{tikzpicture}[auto, node distance =15em, font=\large]
+	\node[block](controller){Mikrocontroller};
+	\node[block, above right of =controller, node distance = 12em](hive){Schwarmintelligenz};
+	\node[block, above of =hive, node distance=6em](com){Kommunikation};
+	\node[block, below left of =controller, node distance =10em](gyro){Gyroskop};
+	\node[block, below right of =controller, node distance =10em](mag){Magnetometer};
+	\node[block, left of =gyro](acc){Beschleunigungsmesser};
+	\node[block, right of =mag](baro){Barometer};
+	\coordinate[shift={(-2em,2em)}] (FC1) at (acc.west|-controller.north);
+	\coordinate[shift={(2em,-2em)}] (FC2) at (baro.south-|baro.east);
+	\draw[dashed] (FC1) rectangle (FC2);
+	\node[anchor=north west] at (FC1) {Flight-Controller};
+	%\node[block, below left of =gyro, node distance = 12em](action){Antrieb};
+	\node[block, below of =controller, node distance =15em](action){Antrieb};
+	%\node[block, below right of =gyro, node distance = 12em](peripherie){Peripherie};
+	\node[block, left of =hive, node distance = 20em](peripherie){Peripherie};
+	\path[line] (hive) -- (FC1-|com)node[midway]{Servo-Signal Bus \& Serielle Schnittstelle};
+	\path[line] (hive) -- (com)node[midway, right]{Serielle Schnittstelle};
+	\path[line] (action) -- (FC2-|action)node[midway, right]{PWM-Signal Bus};
+	\path[line] (peripherie) -- (hive)node[midway,above]{I\textsuperscript{2}C-Protokoll};
+	\path[line] (controller.west) ++(0,0.5em)-| (acc);
+	\path[line] (controller.west) ++(0,-0.5em)-| (gyro);
+	\path[line] (controller.east) ++(0,0.5em)-| (baro);
+	\path[line] (controller.east) ++(0,-0.5em)-| (mag);
+	%\node[block](switch){Switch};
+	%\node[block, above of =switch](hmi){HMI};
+	%\node[block, below left of = switch](cam){Kamera};
+	%\node[block, below right of = switch](robot){Roboter};
+	%\node[block, below of = robot](enc-splitter){Encoder-Splitter};
+	%\node[block, right of = enc-splitter, node distance = 10 em](encoder){Encoder};
+	%\node[block, right of = encoder, node distance = 12.5 em](conveyor){F"orderband};
+	%Linien
+	%\path[line](hmi)--(switch)node[midway, text width = 4em, text badly centered]{Ethernet- Kabel};
+	%\path[line](switch)-|(cam)node[midway, left, text width = 4em, text badly centered]{Ethernet- Kabel};
+	%\path[line](switch)-|(robot)node[midway, right, text width = 4em, text badly centered]{Ethernet- Kabel};
+	%\path[line](cam)|-(enc-splitter)node[near start, left, text width = 4em, text badly centered]{Daten- Kabel};
+	%\path[line](robot)--(enc-splitter) node[midway, right, text width = 4em, text badly centered]{Daten- Kabel};
+	%\path[line](enc-splitter)--(encoder) node[midway, above]{Daten-} node[midway, below]{Kabel};
+	%\path[line](encoder)--(conveyor) node [midway, above]{mechanische}node [midway, below]{Kupplung};
+\end{tikzpicture}
+
+\end{document}

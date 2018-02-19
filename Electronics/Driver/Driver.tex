@@ -1,0 +1,90 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{helvet}
+\renewcommand{\familydefault}{cmss}
+\usepackage[natural, table, fixpdftex, hyperref]{xcolor}
+\usepackage{tikz}
+\usepackage[european, emptydiodes, arrowmos, smartlabels, siunitx]{circuitikz}
+\usetikzlibrary{shapes,arrows,positioning,matrix}
+
+%%%<
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{2pt}%
+%%%>
+
+\begin{comment}
+:Title: Einzeltreiber-Schaltung
+:Copyright: Otrebski
+\end{comment}
+
+
+% Motor taken from: http://tex.stackexchange.com/questions/132076/how-to-draw-a-dc-motor-in-circuitikz
+% prepare to create bipoles
+\makeatletter
+\def\TikzBipolePath#1#2{\pgf@circ@bipole@path{#1}{#2}}
+\def\CircDirection{\pgf@circ@direction}
+\pgf@circ@Rlen = \pgfkeysvalueof{/tikz/circuitikz/bipoles/length}
+\makeatother 
+\newlength{\ResUp} \newlength{\ResDown}
+\newlength{\ResLeft} \newlength{\ResRight}
+% set default motor size
+\ctikzset{bipoles/motor/height/.initial=.8}
+\ctikzset{bipoles/motor/width/.initial=.8}
+% create motor shape
+\pgfcircdeclarebipole{}
+ {\ctikzvalof{bipoles/motor/height}}
+ {motor}
+ {\ctikzvalof{bipoles/motor/height}}
+ {\ctikzvalof{bipoles/motor/width}}
+ {
+    \pgfsetlinewidth{\ctikzvalof{bipoles/thickness}\pgfstartlinewidth}
+    \pgfextractx{\ResRight}{\northeast}
+    \pgfextracty{\ResUp}{\northeast}
+    \pgfextractx{\ResLeft}{\southwest}
+    \pgfextracty{\ResDown}{\southwest}
+  \pgfpathmoveto{\pgfpoint{0.775\ResLeft}{0.2\ResDown}}
+\pgfpathlineto{\pgfpoint{\ResLeft}{0.2\ResDown}}
+  \pgfpathlineto{\pgfpoint{\ResLeft}{0.2\ResUp}}
+  \pgfpathlineto{\pgfpoint{0.775\ResLeft}{0.2\ResUp}}
+\pgfpathellipse{\pgfpointorigin}{\pgfpoint{0.8\ResRight}{0cm}}
+    {\pgfpoint{0cm}{0.8\ResUp}}
+  \pgfpathmoveto{\pgfpoint{0.775\ResRight}{0.2\ResDown}}
+    \pgfpathlineto{\pgfpoint{\ResRight}{0.2\ResDown}}
+  \pgfpathlineto{\pgfpoint{\ResRight}{0.2\ResUp}}
+  \pgfpathlineto{\pgfpoint{0.775\ResRight}{0.2\ResUp}}
+  \pgfusepath{draw} %draw motor
+    \pgftext[rotate=-\CircDirection]{\textsf{M}}
+ }
+% create motorto-path style
+\def\motorpath#1{\TikzBipolePath{motor}{#1}}
+\tikzset{motor/.style = {\circuitikzbasekey, /tikz/to path=\motorpath, l=#1}}
+% end of setup
+
+
+\begin{document}
+\pagestyle{empty}
+
+
+% Define block styles
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
+    text width=10em, text centered, minimum height=2em]
+\tikzstyle{line} = [draw, latex'-latex', thick]
+    
+\begin{circuitikz}[auto, node distance =15em]
+	\node[anchor=east](start)at(0,0){Flight-Controller};
+	\node[nigfete,anchor=G](MOSFET)at(3,0){IPS105N03LG};
+	\draw(MOSFET.D) -- ++(0,0.5)node[circ](tmp1){} to[motor] ++(0,2.5)node[circ](tmp2){} -- ++(1,0)node[at end, anchor=west]{Batterie +};
+	\draw(start.east) to[R,l=150<\ohm>](MOSFET.G);
+	\draw(MOSFET.G) ++(-0.25,0)node[circ](tmp3){};
+	\draw(tmp1) -- ++(-1,0) to[diode] ++(0,2.5) --(tmp2);
+	\draw(MOSFET.S) -- ++(0,-1.5)node[circ](tmp4){} --++(1,0)node[at end, anchor=west]{Batterie --};
+	\draw(tmp3) to[R, l_=10<\kilo\ohm>](tmp3|-tmp4)--(tmp4);
+	\node at(-0.5,-2){\scriptsize Driver circiut for DC-motors};
+\end{circuitikz}
+
+\end{document}
